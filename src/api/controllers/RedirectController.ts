@@ -14,12 +14,12 @@ export default class RedirectController {
         this.router.post("/", this.Store.bind(this))
     }
 
-    private async Find(req: Request, res: Response): Promise<Response> {
+    private async Find(req: Request, res: Response): Promise<Response|void> {
         const { code } = req.params
 
         try {
             const redirect = await this.service.Find(code)
-            return res.status(200).send(redirect)
+            return res.status(301).redirect(redirect.Url)
         } catch (error) {
             if (error instanceof ErrRedirectNotFound)
                 return res.status(404).send({ message: error.message })
