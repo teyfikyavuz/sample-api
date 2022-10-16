@@ -6,9 +6,9 @@ Npm package install
 npm install
 ```
 
-Typescript build
-```
 Build
+```
+npm run build
 ```
 
 Build and start
