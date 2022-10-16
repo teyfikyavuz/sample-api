@@ -1,6 +1,18 @@
 import Redirect from "../entities/Redirect"
 import RedirectRepository from "../repositories/RedirectRepository"
 
+export class ErrRedirectNotFound extends Error {
+    constructor() {
+        super("Redirect not found")
+    }
+}
+
+export class ErrRedirectInvalidURL extends Error {
+    constructor() {
+        super("Invalid redirect url")
+    }
+}
+
 export default class RedirectService {
     private redirectRepository: RedirectRepository
 
@@ -9,12 +21,16 @@ export default class RedirectService {
     }
     
     public async Find(code: string): Promise<Redirect> {
-        return this.redirectRepository.Find(code)
+        const redirect = await this.redirectRepository.Find(code)
+        if (!redirect)
+            throw new ErrRedirectNotFound()
+
+        return redirect
     }
 
     public async Store(url: string): Promise<Redirect> {
-        if (url === "")
-            throw Error("Invalid redirect url")
+        if (!url || url === "")
+            throw new ErrRedirectInvalidURL()
 
         const redirect: Redirect = {
             Url: url,
@@ -22,7 +38,7 @@ export default class RedirectService {
             CreatedAt: new Date
         }
 
-        return this.redirectRepository.Store(redirect)
+        return await this.redirectRepository.Store(redirect)
     }
 
 }

@@ -1,12 +1,12 @@
 import { Router, Request, Response } from "express";
-import RedirectService from "../../core/services/RedirectService"
+import RedirectService, { ErrRedirectInvalidURL, ErrRedirectNotFound } from "../../core/services/RedirectService"
 
 export default class RedirectController {
-    private redirectService: RedirectService
+    private service: RedirectService
     public router: Router
 
     constructor(redirectService: RedirectService, router: Router) {
-        this.redirectService = redirectService
+        this.service = redirectService
         this.router = router
 
         // Define Routes
@@ -18,11 +18,13 @@ export default class RedirectController {
         const { code } = req.params
 
         try {
-            const redirect = await this.redirectService.Find(code)
+            const redirect = await this.service.Find(code)
             return res.status(200).send(redirect)
         } catch (error) {
-            console.error(error)
-            return res.status(500).send(error)
+            if (error instanceof ErrRedirectNotFound)
+                return res.status(404).send({ message: error.message })
+
+            return res.status(500).send((error as Error).message)
         }
     }
 
@@ -30,11 +32,13 @@ export default class RedirectController {
         const { url } = req.body
 
         try {
-            const redirect = await this.redirectService.Store(url)
+            const redirect = await this.service.Store(url)
             return res.status(201).send(redirect)
         } catch (error) {
-            console.error(error)
-            return res.status(500).send(error)
+            if (error instanceof ErrRedirectInvalidURL)
+                return res.status(400).send({ message: error.message })
+            
+            return res.status(500).send((error as Error).message)
         }
     }
 
