@@ -1,4 +1,4 @@
-import Redirect from "../../core/entities/Redirect";
+import Redirect from "../../core/entities/Redirect"
 import RedirectRepository from "../../core/repositories/RedirectRepository"
 
 // Sample model

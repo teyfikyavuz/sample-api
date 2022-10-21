@@ -4,7 +4,7 @@ import RedirectDataSource from "../data-source/memory/RedirectDataSource"
 import RedirectController from "./controllers/RedirectController"
 
 export default class Server {
-    private express: express.Express;
+    private express: express.Express
     private port: number
 
     constructor(port: number) {
