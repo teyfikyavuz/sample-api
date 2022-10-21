@@ -3,13 +3,13 @@ import RedirectRepository from "../repositories/RedirectRepository"
 
 export class ErrRedirectNotFound extends Error {
     constructor() {
-        super("Redirect not found")
+        super("Redirect not found.")
     }
 }
 
 export class ErrRedirectInvalidURL extends Error {
     constructor() {
-        super("Invalid redirect url")
+        super("Invalid redirect url.")
     }
 }
 

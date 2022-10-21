@@ -1,9 +1,10 @@
-import { Router, Request, Response } from "express";
+import { Router, Request, Response } from "express"
 import RedirectService, { ErrRedirectInvalidURL, ErrRedirectNotFound } from "../../core/services/RedirectService"
+import Controller from "./Controller"
 
-export default class RedirectController {
+export default class RedirectController implements Controller {
     private service: RedirectService
-    public router: Router
+    router: Router
 
     constructor(redirectService: RedirectService, router: Router) {
         this.service = redirectService
@@ -27,7 +28,7 @@ export default class RedirectController {
             return res.status(500).send((error as Error).message)
         }
     }
-
+    
     private async Store(req: Request, res: Response): Promise<Response> {
         const { url } = req.body
 
