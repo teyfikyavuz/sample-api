@@ -20,15 +20,17 @@ Start tests
 ```
 npm run test
 ```
-
 ```
-curl --location --request POST 'localhost:1234/v1' \
+curl --location --request GET 'localhost:8081/healthcheck'
+```
+```
+curl --location --request POST 'localhost:8081/v1' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "url": "https://project418.co"
 }'
 ```
 ``` 
-curl --location --request GET 'localhost:1234/v1/qbah7'
+curl --location --request GET 'localhost:8081/v1/qbah7'
 ```
 
