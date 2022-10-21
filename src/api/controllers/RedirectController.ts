@@ -1,5 +1,6 @@
 import { Router, Request, Response } from "express"
 import RedirectService, { ErrRedirectInvalidURL, ErrRedirectNotFound } from "../../core/services/RedirectService"
+import StatusCode from "../StatusCode"
 import Controller from "./Controller"
 
 export default class RedirectController implements Controller {
@@ -20,12 +21,12 @@ export default class RedirectController implements Controller {
 
         try {
             const redirect = await this.service.Find(code)
-            return res.status(301).redirect(redirect.Url)
+            return res.status(StatusCode.RedirectMovedPermanently).redirect(redirect.Url)
         } catch (error) {
             if (error instanceof ErrRedirectNotFound)
-                return res.status(404).send({ message: error.message })
+                return res.status(StatusCode.ClientErrorNotFound).send({ message: error.message })
 
-            return res.status(500).send((error as Error).message)
+            return res.status(StatusCode.ServerErrorInternal).send((error as Error).message)
         }
     }
     
@@ -34,12 +35,12 @@ export default class RedirectController implements Controller {
 
         try {
             const redirect = await this.service.Store(url)
-            return res.status(201).send(redirect)
+            return res.status(StatusCode.SuccessCreated).send(redirect)
         } catch (error) {
             if (error instanceof ErrRedirectInvalidURL)
-                return res.status(400).send({ message: error.message })
+                return res.status(StatusCode.ClientErrorBadRequest).send({ message: error.message })
             
-            return res.status(500).send((error as Error).message)
+            return res.status(StatusCode.ServerErrorInternal).send((error as Error).message)
         }
     }
 
