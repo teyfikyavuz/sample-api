@@ -1,7 +1,8 @@
 import express, { Router, Request, Response } from "express"
 import helmet from "helmet"
 import RedirectService from "../core/services/RedirectService"
-import RedirectDataSource from "../data-source/memory/RedirectDataSource"
+import RedirectDataSource from "../data-source/mongo/RedirectDataSource" // MongoDB store
+//import RedirectDataSource from "../data-source/memory/RedirectDataSource" // Memory store
 import RedirectController from "./controllers/RedirectController"
 import StatusCode from "./StatusCode"
 
@@ -15,10 +16,13 @@ export default class Server {
 
         // Config
         this.config()
-        this.handlers()
+        this.healthcheck()
 
         // Controller
         this.initializeControllers()
+
+        // General handlers
+        this.handlers()
     }
 
     public listen() {
@@ -48,8 +52,7 @@ export default class Server {
         this.express.use(helmet.xssFilter())
     }
 
-    private handlers(): void {
-        // Healthcheck
+    private healthcheck(): void {
         this.express.use("/healthcheck", async (req: Request, res: Response) => {
             const healthcheck = {
                 uptime: process.uptime(),
@@ -64,7 +67,9 @@ export default class Server {
                 return res.status(StatusCode.ServerErrorServiceUnavailable).send(healthcheck)
             }
         })
-        
+    }
+
+    private handlers(): void {
         // Custom 404 response
         this.express.use((req: Request, res: Response) => {
             return res.status(StatusCode.ClientErrorNotFound).send({ message: "Sorry can't find that!" })
