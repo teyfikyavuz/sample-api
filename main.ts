@@ -1,5 +1,5 @@
 import dotenv from "dotenv"
-import Server from "./src/api/Server"
+import Server from "./src/adapters/rest/Server"
 
 // Dotenv
 dotenv.config()

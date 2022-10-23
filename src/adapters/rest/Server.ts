@@ -1,7 +1,7 @@
 import express, { Router, Request, Response } from "express"
 import helmet from "helmet"
-import RedirectService from "../core/services/RedirectService"
-import RedirectDataSource from "../data-source/mongo/RedirectDataSource" // MongoDB store
+import RedirectService from "../../domain/services/RedirectService"
+import RedirectDataSource from "../repository/mongo/RedirectDataSource" // MongoDB store
 //import RedirectDataSource from "../data-source/memory/RedirectDataSource" // Memory store
 import RedirectController from "./controllers/RedirectController"
 import StatusCode from "./StatusCode"

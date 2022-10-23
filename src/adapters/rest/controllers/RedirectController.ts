@@ -1,5 +1,5 @@
 import { Router, Request, Response } from "express"
-import RedirectService, { ErrRedirectInvalidURL, ErrRedirectNotFound } from "../../core/services/RedirectService"
+import RedirectService, { ErrRedirectInvalidURL, ErrRedirectNotFound } from "../../../domain/services/RedirectService"
 import StatusCode from "../StatusCode"
 import Controller from "./Controller"
 
@@ -21,7 +21,7 @@ export default class RedirectController implements Controller {
 
         try {
             const redirect = await this.service.Find(code)
-            return res.status(StatusCode.RedirectMovedPermanently).redirect(redirect.Url)
+            return res.status(StatusCode.RedirectMovedPermanently).redirect(redirect.url)
         } catch (error) {
             if (error instanceof ErrRedirectNotFound)
                 return res.status(StatusCode.ClientErrorNotFound).send({ message: error.message })

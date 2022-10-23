@@ -1,10 +1,9 @@
-import Redirect from "../../core/entities/Redirect"
-import RedirectRepository from "../../core/repositories/RedirectRepository"
+import Redirect from "../../../domain/entities/Redirect"
+import RedirectRepository from "../../../domain/ports/RedirectRepository"
 import Connection from "./models/Connection"
 import RedirectMongo from "./models/Redirect"
 
 export default class RedirectDataSource implements RedirectRepository {
-
     constructor() {
         new Connection()
     }
@@ -14,23 +13,16 @@ export default class RedirectDataSource implements RedirectRepository {
         if (!redirectMongo)
             return null
 
-        return {
-            Code: redirectMongo.code,
-            Url: redirectMongo.url,
-            CreatedAt: redirectMongo.createdAt
-        } as Redirect
+        return { ...redirectMongo } as Redirect
     }
 
     async Store(redirect: Redirect): Promise<Redirect> {
         const redirectMongo = new RedirectMongo({
-            isDeleted: false,
-            code: redirect.Code,
-            url: redirect.Url,
-            createdAt: redirect.CreatedAt
+            ...redirect,
+            isDeleted: false
         })
-        await redirectMongo.save()
 
+        await redirectMongo.save()
         return redirect
-    }
-    
+    }   
 }

@@ -1,20 +1,23 @@
 import "mocha"
-import RedirectService from "../src/core/services/RedirectService"
-import RedirectDataSource from "../src/data-source/memory/RedirectDataSource"
+import dotenv from "dotenv"
+import RedirectService from "../src/domain/services/RedirectService"
+import RedirectDataSource from "../src/adapters/repository/mongo/RedirectDataSource"
+
+// Dotenv
+dotenv.config()
+
+// Redirect service
+const redirectRepository = new RedirectDataSource()
+const redirectService = new RedirectService(redirectRepository)
 
 describe("Redirect Tests", () => {
     it("Store", async () => {
-        const redirectRepository = new RedirectDataSource()
-        const redirectService = new RedirectService(redirectRepository)
-
         await redirectService.Store("http://project418.com")
     })
 
     it("Find", async () => {
-        const redirectRepository = new RedirectDataSource()
-        const redirectService = new RedirectService(redirectRepository)
-
-        await redirectService.Find("1w3ne")
+        const stored = await redirectService.Store("http://project418.com")
+        await redirectService.Find(stored.code)
     })
     
 })

@@ -1,5 +1,5 @@
-import Redirect from "../../core/entities/Redirect"
-import RedirectRepository from "../../core/repositories/RedirectRepository"
+import Redirect from "../../../domain/entities/Redirect"
+import RedirectRepository from "../../../domain/ports/RedirectRepository"
 
 // Sample model
 interface RedirectData {
@@ -19,12 +19,7 @@ export default class RedirectDataSource implements RedirectRepository {
             if (!findedRedirect)
                 return resolve(null)
                 
-            const redirect: Redirect = {
-                Code: findedRedirect.code,
-                Url: findedRedirect.url,
-                CreatedAt: findedRedirect.createdAt
-            }
-
+            const redirect: Redirect = { ...findedRedirect }
             return resolve(redirect)
         })
     }
@@ -32,14 +27,11 @@ export default class RedirectDataSource implements RedirectRepository {
     Store(redirect: Redirect): Promise<Redirect> {
         return new Promise((resolve, reject) => {
             const redirectData: RedirectData = {
-                isActive: true,
-                code: redirect.Code,
-                url: redirect.Url,
-                createdAt: redirect.CreatedAt
+                ...redirect,
+                isActive: false
             }
 
             this.redirects.push(redirectData)
-
             return resolve(redirect)
         })
     }

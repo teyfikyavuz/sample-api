@@ -1,5 +1,5 @@
-import Redirect from "../../core/entities/Redirect"
-import RedirectRepository from "../../core/repositories/RedirectRepository"
+import Redirect from "../../../domain/entities/Redirect"
+import RedirectRepository from "../../../domain/ports/RedirectRepository"
 
 export default class RedirectDataSource implements RedirectRepository {
     Find(code: string): Promise<Redirect | null> {

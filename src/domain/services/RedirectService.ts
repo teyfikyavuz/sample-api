@@ -1,5 +1,5 @@
 import Redirect from "../entities/Redirect"
-import RedirectRepository from "../repositories/RedirectRepository"
+import RedirectRepository from "../ports/RedirectRepository"
 
 export class ErrRedirectNotFound extends Error {
     constructor() {
@@ -33,9 +33,9 @@ export default class RedirectService {
             throw new ErrRedirectInvalidURL()
 
         const redirect: Redirect = {
-            Url: url,
-            Code: (Math.random() + 1).toString(36).substring(7),
-            CreatedAt: new Date
+            url: url,
+            code: (Math.random() + 1).toString(36).substring(7),
+            createdAt: new Date
         }
 
         return await this.redirectRepository.Store(redirect)
